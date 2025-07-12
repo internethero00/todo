@@ -7,7 +7,7 @@ export const useSortedPosts = (posts: Props[], sort: string) => {
         if (sort) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
-            return [...posts].sort((a: Props, b:Props) => a[filter.sort].localeCompare(b[filter.sort]))
+            return [...posts].sort((a: Props, b:Props) => a[sort].localeCompare(b[sort]))
         }
         return posts;
     }, [sort, posts]);
