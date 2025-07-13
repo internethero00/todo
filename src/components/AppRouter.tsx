@@ -1,18 +1,41 @@
-import {Route, Routes} from "react-router-dom";
-import About from "../pages/About.tsx";
-import Posts from "../pages/Posts.tsx";
-import Error from "../pages/Error.tsx";
-import PostIdPage from "../pages/PostIdPage.tsx";
+import {Route, Routes, useNavigate} from "react-router-dom";
+import {publicRoutes, privateRoutes} from "../router/routes.ts";
+import {useContext, useEffect} from "react";
+import {AuthContext} from "../context/authContext.tsx";
 
 const AppRouter = () => {
+    const {isAuth, setIsAuth} = useContext(AuthContext);
+    console.log(isAuth);
+    const navigate = useNavigate();
+    useEffect(() => {
+        navigate('/login');
+    }, []);
+
+    useEffect(() => {
+        if (localStorage.getItem('auth')) {
+            setIsAuth(true)
+            navigate('/posts')
+        } else {
+            navigate('/login')
+        }
+    }, [])
     return (
-        <Routes>
-            <Route path="/about" element={<About/>}/>
-            <Route path="/posts" element={<Posts/>}/>
-            <Route path="/" element={<Posts/>}/>
-            <Route path="/posts/:id" element={<PostIdPage/>}/>
-            <Route path="*" element={<Error/>}/>
-        </Routes>
+        isAuth ?
+            <Routes>
+                {privateRoutes.map(route => {
+                        const Component = route.component;
+                        return <Route key={route.path} path={route.path} element={<Component/>}/>
+                    }
+                )}
+            </Routes>
+            :
+            <Routes>
+                {publicRoutes.map(route => {
+                        const Component = route.component;
+                        return <Route key={route.path} path={route.path} element={<Component/>}/>
+                    }
+                )}
+            </Routes>
     );
 };
 

@@ -6,6 +6,7 @@ import Loader from "../components/UI/Loader/Loader.tsx";
 
 const PostIdPage = () => {
     const params = useParams();
+    console.log(params);
     const [post, setPost] = useState<{ id: number, title: string }>({id: 0, title: ""});
     const [comments, setcomment] = useState<{email: string, body: string}[]>([]);
     const [fetchPostById, isLoading, error] = useFetching(async (id) => {
@@ -34,7 +35,7 @@ const PostIdPage = () => {
                     {isComLoading ? (
                         <Loader/>
                         ) : <div>{comments.map(comm =>
-                        <div style={{marginTop: 15}}>
+                        <div key={new Date().getDay()} style={{marginTop: 15}}>
                             <h5>{comm.email}</h5>
                             <div>{comm.body}</div>
                         </div>
